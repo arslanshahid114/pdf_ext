@@ -39,17 +39,17 @@ class UsersController < ApplicationController
           end
 
           next unless actual_data
+          # match = employee.match /\s*(?<name>[A-Za-z]+\s[A-Za-z]*)\s+(?<position>[A-Za-z]+\s*[A-Za-z]*)\s+(?<office>[A-Za-z]+\s*[A-Za-z]*)\s+(?<age>[0-9]{1,3})\s+(?<start_date>[0-9]{4}-[0-9]{1,2}-[0-9]{1,2})\s+(?<salary>\$[0-9,]+)/
+          match = employee.match /\s*(?<name>[A-Za-z]+\s[A-Za-z]*)\s+(?<position>[A-Za-z]+(. *?)+\s*[A-Za-z]*)\s+(?<office>[A-Za-z]+\s*[A-Za-z]*)\s+(?<age>[0-9]{1,3})\s+(?<start_date>[0-9]{4}-[0-9]{1,2}-[0-9]{1,2})\s+(?<salary>\$[0-9,]+)/
           
-          next if employee.strip.empty?
-          name, position, office, age, start_date, salary = employee.split(" " * 6)
-        
-          puts "Name: #{name}"
-          puts "Position: #{position}"
-          puts "Office: #{office}"
-          puts "Age: #{age}"
-          puts "Start date: #{start_date}"
-          puts "Salary: #{salary}"
-          puts "---"
+          next unless match
+          User.create(
+            name: match[:name].to_s.lstrip.rstrip,
+              position: match[:position].to_s.lstrip.rstrip,
+            office: match[:office].to_s.lstrip.rstrip,
+            age: match[:age].to_s.lstrip.rstrip,
+            start_date: match[:start_date].to_s.lstrip.rstrip,
+            salary: match[:salary].to_s.lstrip.rstrip) 
           end
   
     end
